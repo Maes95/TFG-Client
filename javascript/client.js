@@ -1,4 +1,4 @@
-angular.module("client", ['chart.js']).controller("resultsController", function($scope, $window, $export,FakeResults, Excel) {
+angular.module("client", ['chart.js']).controller("resultsController", function($scope, $window, $export,FakeResults, Excel, StaticData) {
 
         var n = 0;
         $scope.apps = {};
@@ -225,12 +225,15 @@ angular.module("client", ['chart.js']).controller("resultsController", function(
             }
         }
 
-        if (window.File && window.FileList) {
-            var drop_area = document.getElementById("drop_area");
-            drop_area.addEventListener("dragover", dragHandler);
-            drop_area.addEventListener("drop", filesDroped);
-        } else {
-            console.log("Your browser does not support File API");
+        function enableUploadFiles() {
+          $('#upload-data').show();
+          if (window.File && window.FileList) {
+              var drop_area = document.getElementById("drop_area");
+              drop_area.addEventListener("dragover", dragHandler);
+              drop_area.addEventListener("drop", filesDroped);
+          } else {
+              console.log("Your browser does not support File API");
+          }
         }
 
         function dragHandler(event) {
@@ -286,22 +289,31 @@ angular.module("client", ['chart.js']).controller("resultsController", function(
         	SET UP
         */
 
+        STATIC = true;
+
         if (location.host) {
-            // SERVER UP, OPEN CONNECTION
-            $scope.local = false;
-            var eb = new EventBus("/eventbus/");
-            eb.onopen = function() {
-                eb.registerHandler("new.result", function(err, message) {
-                    console.log(JSON.stringify(message.body));
-                    addResult(message.body);
+            if(STATIC){
+                // STATIC SERVER
+                $scope.loading_text = "Loading data";
+                StaticData.generate(function(result){
+                  addResult(result);
                 });
-            };
+            }else{
+              // SERVER UP, OPEN CONNECTION
+              $scope.loading_text = "Running test";
+              $scope.local = false;
+              var eb = new EventBus("/eventbus/");
+              eb.onopen = function() {
+                  eb.registerHandler("new.result", function(err, message) {
+                      console.log(JSON.stringify(message.body));
+                      addResult(message.body);
+                  });
+              };
+            }
         } else {
-            // NO SERVER AVAILABLE
+            // LOCAL
             $scope.local = true;
-            // FakeResults.generate(function(result){
-            // 	addResult(result);
-            // });
+            enableUploadFiles();
         }
 
     })

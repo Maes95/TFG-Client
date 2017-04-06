@@ -1,0 +1,10 @@
+{
+  "apps" :[
+    "AkkaPlay",
+    "NodeJS",
+    "NodeJSCluster",
+    "SpringBoot-Tomcat",
+    "Vertx",
+    "VertxNoEventBus"
+  ]
+}

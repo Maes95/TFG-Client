@@ -18,6 +18,7 @@
     <script src="./javascript/client.js"></script>
     <script src="./javascript/export-api.js"></script>
     <script src="./javascript/test.js"></script>
+    <script src="./javascript/static-data.js"></script>
 	  <script src="./javascript/lib/angular-chart.js"></script>
 
     <!-- Local Styles -->
@@ -47,7 +48,7 @@
       <div class="inner one"></div>
       <div class="inner two"></div>
       <div class="inner three"></div>
-      <div class="text">Running test</div>
+      <div class="text">{{ loading_text }}</div>
     </div>
 
 
@@ -55,7 +56,7 @@
 
       <!-- UPLOAD DATA -->
 
-      <div ng-show="empty && local" class="column">
+      <div id="upload-data" class="column" style="display: none;">
         <div class="ui segment load-box-init">
           <h2 class="ui icon header" style="width: 100%;">
             <div class="content">
@@ -100,7 +101,7 @@
         </div>
       </div>
 
-		  <div ng-repeat="item in graphics" class="column">
+		  <div ng-repeat="item in graphics" class="column hide">
   			<div class="ui top attached segment">
           <button ng-init="item.visible = true;" ng-click="slideDown(item)" class="ui basic icon button drop">
             <i class="chevron icon" ng-class="item.visible ? 'down' : 'right' "></i>
