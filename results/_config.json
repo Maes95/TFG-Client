@@ -4,7 +4,8 @@
     "NodeJS",
     "NodeJSCluster",
     "SpringBoot-Tomcat",
+    "SpringBoot-Jetty",
     "Vertx",
-    "VertxNoEventBus"
+    "VertxNoEventbus"
   ]
 }
