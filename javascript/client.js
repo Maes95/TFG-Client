@@ -22,7 +22,7 @@ angular.module("client", ['chart.js']).controller("resultsController", function(
             $scope.graphics[chatSizeName].dataMemoryUse[k].push(result.avgMemoryUse);
 
             $scope.apps[result.app].results.push(result);
-            if (!$scope.local) $scope.$apply();
+            if (!$scope.local && !STATIC) $scope.$apply();
         }
 
         function newApp(app_name, globalDefinition, specificDefinition) {
@@ -176,7 +176,9 @@ angular.module("client", ['chart.js']).controller("resultsController", function(
         }
 
         $scope.getGraphImg = function(item, selector) {
-            return $('#' + item.chatSize + '-size-' + selector)[0].toDataURL("image/png");
+            var elem = $('#' + item.chatSize + '-size-' + selector);
+            if(elem.length)
+                return elem[0].toDataURL("image/png");
         }
 
         $scope.exportToPDF = function(item) {
