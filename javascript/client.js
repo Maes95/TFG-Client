@@ -222,13 +222,14 @@ angular.module("client", ['chart.js']).controller("resultsController", function(
         $scope.results = [];
 
         $scope.loadResults = function() {
+            $scope.uploadData = false;
             for (var i = 0; i < $scope.results.length; i++) {
                 addResult($scope.results[i]);
             }
         }
 
         function enableUploadFiles() {
-          $('#upload-data').show();
+          $scope.uploadData = true;
           if (window.File && window.FileList) {
               var drop_area = document.getElementById("drop_area");
               drop_area.addEventListener("dragover", dragHandler);
@@ -292,7 +293,7 @@ angular.module("client", ['chart.js']).controller("resultsController", function(
         */
 
         STATIC = true;
-
+        $('.main').show();
         if (location.host) {
             if(STATIC){
                 // STATIC SERVER
@@ -302,6 +303,7 @@ angular.module("client", ['chart.js']).controller("resultsController", function(
                 });
             }else{
               // SERVER UP, OPEN CONNECTION
+              $('#static-loader').hide();
               $scope.loading_text = "Running test";
               $scope.local = false;
               var eb = new EventBus("/eventbus/");
@@ -314,6 +316,7 @@ angular.module("client", ['chart.js']).controller("resultsController", function(
             }
         } else {
             // LOCAL
+            $('#static-loader').hide();
             $scope.local = true;
             enableUploadFiles();
         }

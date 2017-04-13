@@ -30,7 +30,12 @@
 </head>
 
 <body>
-	<div  ng-app="client" ng-controller="resultsController" class="main">
+  <div id="static-loader" class="loader">
+      <div class="inner one"></div>
+      <div class="inner two"></div>
+      <div class="inner three"></div>
+  </div>
+	<div  ng-app="client" ng-controller="resultsController" class="main hide">
 
     <div id="appDef" class="ui modal">
       <div class="header center-text">Application detail</div>
@@ -59,7 +64,7 @@
 
       <!-- UPLOAD DATA -->
 
-      <div id="upload-data" class="column" style="display: none;">
+      <div id="upload-data" class="column" ng-show="uploadData">
         <div class="ui segment load-box-init">
           <h2 class="ui icon header" style="width: 100%;">
             <div class="content">
