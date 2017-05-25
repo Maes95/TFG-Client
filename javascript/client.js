@@ -11,8 +11,9 @@ angular.module("client", ['chart.js']).controller("resultsController", function(
             // IF GRAFIC WITH N CHAT ROOMS EXISTS
             if (!$scope.graphics[chatSizeName]) newGraphic(chatSizeName);
             // IF LABEL IN GRAPHIC EXIST
-            var index = $scope.graphics[chatSizeName].labels.indexOf(result.numUsers)
-            if (index == -1) newLabel(result.numUsers, chatSizeName);
+            var label = result.numUsers;
+            var index = $scope.graphics[chatSizeName].labels.indexOf(label)
+            if (index == -1) newLabel(label, chatSizeName);
             // IF APP EXISTS
             if (!$scope.apps[result.app]) newApp(result.app, result.globalDefinition, result.specificDefinition);
             var k = $scope.apps[result.app].index;
@@ -292,18 +293,34 @@ angular.module("client", ['chart.js']).controller("resultsController", function(
         	SET UP
         */
 
+        $scope.selectMode = function(upload){
+          if(upload){
+            $scope.local = true;
+            $scope.static = false;
+            enableUploadFiles();
+          }else{
+            StaticData.generate(function(result){
+              addResult(result);
+            });
+          }
+        }
+
         STATIC = true;
         $('.main').show();
         if (location.host) {
             if(STATIC){
                 // STATIC SERVER
-                $scope.loading_text = "Loading data";
-                StaticData.generate(function(result){
-                  addResult(result);
-                });
+                var param  = window.location.search.substr(1);
+                if( param == "view"){
+                  $scope.selectMode(false);
+                }else if(param == "upload"){
+                  $scope.selectMode(true);
+                }else{
+                  $scope.static = true;
+                }
             }else{
               // SERVER UP, OPEN CONNECTION
-              $('#static-loader').hide();
+              //$('#static-loader').hide();
               $scope.loading_text = "Running test";
               $scope.local = false;
               var eb = new EventBus("/eventbus/");
@@ -316,20 +333,19 @@ angular.module("client", ['chart.js']).controller("resultsController", function(
             }
         } else {
             // LOCAL
-            $('#static-loader').hide();
             $scope.local = true;
             enableUploadFiles();
         }
 
     })
-    .directive("filesread", [function() {
-        return {
-            scope: {
-                filesread: "="
-            },
-            restrict: 'A',
-            link: function(scope, element, attributes) {
-                element.bind('change', scope.filesread);
-            }
+.directive("filesread", [function() {
+    return {
+        scope: {
+            filesread: "="
+        },
+        restrict: 'A',
+        link: function(scope, element, attributes) {
+            element.bind('change', scope.filesread);
         }
-    }]);
+    }
+}]);

@@ -30,12 +30,33 @@
 </head>
 
 <body>
-  <div id="static-loader" class="loader">
+  <!-- <div id="static-loader" class="loader">
       <div class="inner one"></div>
       <div class="inner two"></div>
       <div class="inner three"></div>
-  </div>
+  </div> -->
+
 	<div  ng-app="client" ng-controller="resultsController" class="main hide">
+
+    <div ng-show="empty && static" id="selection-segment" class="ui segment">
+      <div class="ui message">
+        <div class="header">
+          Comparative Dashboard
+        </div>
+        <p>Click <b>Upload</b> to see your results or <b>View</b> to see default results.</p>
+      </div>
+      <div class="ui fluid large buttons">
+        <button class="ui button teal" ng-click="selectMode(true)">
+            <i class="cloud upload icon"></i>
+            Upload
+        </button>
+        <div class="or"></div>
+        <button class="ui button" ng-click="selectMode(false)">
+            <i class="unhide icon"></i>
+            View
+        </button>
+      </div>
+    </div>
 
     <div id="appDef" class="ui modal">
       <div class="header center-text">Application detail</div>
@@ -52,7 +73,7 @@
       </div>
     </div>
 
-    <div ng-show="empty && !local" class="loader">
+    <div ng-show="empty && !local && !static" class="loader">
       <div class="inner one"></div>
       <div class="inner two"></div>
       <div class="inner three"></div>
