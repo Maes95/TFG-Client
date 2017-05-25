@@ -220,9 +220,9 @@
               <thead style="text-align: center; ">
                 <tr>
                   <th rowspan="2">App</th>
-                  <th ng-if="item.tab == 0" colspan="{{ item.labels.length }}">Nº of user per room / time (in ms)</th>
-                  <th ng-if="item.tab == 1" colspan="{{ item.labels.length }}">Nº of user per room / % CPU use</th>
-                  <th ng-if="item.tab == 2" colspan="{{ item.labels.length }}">Nº of user per room / % memory use</th>
+                  <th ng-if="item.tab == 0" colspan="{{ item.labels.length }}">Nº of messages / time (in ms)</th>
+                  <th ng-if="item.tab == 1" colspan="{{ item.labels.length }}">Nº of messages / % CPU use</th>
+                  <th ng-if="item.tab == 2" colspan="{{ item.labels.length }}">Nº of messages / memory use (in KBytes)</th>
                 </tr>
                 <tr>
                   <th ng-repeat="label in item.labels track by $index">{{ label }}</th>
@@ -231,8 +231,8 @@
               <tbody>
                 <tr ng-repeat="app in item.series track by $index">
                   <td class="app-name" ng-style="{ color : colors[$index] }">{{ app }}</td>
-                  <td ng-if="!item.tab" class="metric" ng-repeat="metric in getData(item, item.tab, $index) track by $index">{{ metric }}</td>
-                  <td ng-if="item.tab" class="metric" ng-repeat="metric in getData(item, item.tab, $index) track by $index">{{ metric | number: 2 }}</td>
+                  <td ng-if="item.tab == 0" class="metric" ng-repeat="metric in getData(item, item.tab, $index) track by $index">{{ metric }}</td>
+                  <td ng-if="item.tab > 0" class="metric" ng-repeat="metric in getData(item, item.tab, $index) track by $index">{{ metric }}</td>
                 </tr>
               </tbody>
             </table>
@@ -279,7 +279,7 @@
         <thead style="text-align: center; ">
           <tr>
             <th rowspan="2">App</th>
-            <th colspan="{{currentItem.labels.length}}">Nº of user per room / time (en ms)</th>
+            <th colspan="{{currentItem.labels.length}}">Nº of messages / time (en ms)</th>
           </tr>
           <tr>
             <th ng-repeat="label in currentItem.labels track by $index">{{ label }}</th>

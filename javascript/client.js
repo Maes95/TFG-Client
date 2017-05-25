@@ -1,4 +1,4 @@
-angular.module("client", ['chart.js']).controller("resultsController", function($scope, $window, $export,FakeResults, Excel, StaticData) {
+angular.module("client", ['chart.js']).controller("resultsController", function($scope, $window, $export,FakeResults, Excel, StaticData, $filter) {
 
         var n = 0;
         $scope.apps = {};
@@ -11,7 +11,7 @@ angular.module("client", ['chart.js']).controller("resultsController", function(
             // IF GRAFIC WITH N CHAT ROOMS EXISTS
             if (!$scope.graphics[chatSizeName]) newGraphic(chatSizeName);
             // IF LABEL IN GRAPHIC EXIST
-            var label = result.numUsers;
+            var label = result.numUsers * result.numUsers * 500 * result.chatSize;
             var index = $scope.graphics[chatSizeName].labels.indexOf(label)
             if (index == -1) newLabel(label, chatSizeName);
             // IF APP EXISTS
@@ -19,8 +19,8 @@ angular.module("client", ['chart.js']).controller("resultsController", function(
             var k = $scope.apps[result.app].index;
 
             $scope.graphics[chatSizeName].dataTimes[k].push(result.avgTime);
-            $scope.graphics[chatSizeName].dataCpuUse[k].push(result.avgCpuUse);
-            $scope.graphics[chatSizeName].dataMemoryUse[k].push(result.avgMemoryUse);
+            $scope.graphics[chatSizeName].dataCpuUse[k].push(Math.round(result.avgCpuUse));
+            $scope.graphics[chatSizeName].dataMemoryUse[k].push(Math.round(result.avgRam));
 
             $scope.apps[result.app].results.push(result);
             if (!$scope.local && !STATIC) $scope.$apply();
@@ -77,7 +77,7 @@ angular.module("client", ['chart.js']).controller("resultsController", function(
         // MULTI-GRAPHIC
 
         $scope.dataKeys = ["dataTimes", "dataCpuUse", "dataMemoryUse"];
-        $scope.dataKeysDescription = ["time (in ms)", "% CPU use", "% memory use"];
+        $scope.dataKeysDescription = ["time (in ms)", "% CPU use", "memory use (in KBytes)"];
 
         $scope.getData = function(graphic, tab, index) {
             return graphic[$scope.dataKeys[tab]][index];
@@ -111,7 +111,7 @@ angular.module("client", ['chart.js']).controller("resultsController", function(
 
         $scope.timeOptions = getOptions('Time in milliseconds');
         $scope.cpuOptions = getOptions('% of CPU');
-        $scope.memoryOptions = getOptions('% of Memory');
+        $scope.memoryOptions = getOptions('Memory in KBytes');
 
         function getOptions(legend) {
             var options = {
@@ -132,7 +132,7 @@ angular.module("client", ['chart.js']).controller("resultsController", function(
                         },
                         scaleLabel: {
                             display: true,
-                            labelString: "Number of users per chat room"
+                            labelString: "Number of messages sent"
                         },
                     }]
                 }
