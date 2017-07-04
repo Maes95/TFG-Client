@@ -2,8 +2,7 @@ body {
     font-family: sans-serif;
     color: #333;
     height: auto;
-    /*background-color:  #E0E0E0!important;*/
-    background-image: radial-gradient(circle farthest-corner at center, #3C4B57 0%, #1C262B 100%);
+    background-color: rgb(245, 245, 245);
 }
 
 @media(min-width:768px) {
